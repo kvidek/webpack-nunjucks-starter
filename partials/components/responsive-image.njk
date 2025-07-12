@@ -1,0 +1,80 @@
+{# 
+  RESPONSIVE IMAGE COMPONENT
+  
+  A responsive image component that automatically serves different image sizes based on viewport width.
+  Uses the <picture> element with multiple <source> elements for optimal performance.
+  
+  USAGE:
+  {% from "partials/components/responsive-image.njk" import responsiveImage %}
+  {{ responsiveImage(desktop, alt, tablet, mobile, aspectRatio, lazyLoad, objectSize, objectCover) }}
+  
+  PARAMETERS:
+  - desktop (string, required): URL for desktop images (1141px+)
+  - alt (string, required): Alt text for accessibility
+  - tablet (string, optional): URL for tablet images (641px - 1140px) - defaults to desktop
+  - mobile (string, optional): URL for mobile images (up to 640px) - defaults to desktop
+  - aspectRatio (string, optional): Aspect ratio class suffix (default: '1-1')
+    Examples: '1-1', '16-9', '4-3', '3-2'
+  - lazyLoad (boolean, optional): Enable lazy loading (default: true)
+  - objectSize (string, optional): CSS object-fit value (default: 'cover')
+    Options: 'cover', 'contain', 'fill', 'none', 'scale-down'
+  - objectCover (string, optional): CSS object-position value (default: 'center')
+    Options: 'center', 'top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'
+  
+  BREAKPOINTS:
+  - Desktop: 1141px and above (2000px+ gets same image as desktop)
+  - Tablet: 641px - 1140px
+  - Mobile: Up to 640px
+  
+  FEATURES:
+  - Automatic responsive image serving
+  - Lazy loading support
+  - Media loader with blur effect
+  - Configurable aspect ratios
+  - Flexible object-fit and object-position
+  - Accessibility compliant with alt text
+  
+  EXAMPLE:
+  {{ responsiveImage(
+    '/images/hero-desktop.jpg',
+    'Hero image showing our product',
+    '/images/hero-tablet.jpg', 
+    '/images/hero-mobile.jpg',
+    '16-9',
+    true,
+    'cover',
+    'center'
+  ) }}
+  
+  SIMPLE USAGE (single image for all devices):
+  {{ responsiveImage('/images/hero.jpg', 'Hero image') }}
+#}
+
+{% macro responsiveImage(desktop, alt = 'Image', tablet = desktop, mobile = desktop, aspectRatio = '1-1', lazyLoad = true, objectSize = 'cover', objectCover = 'center') %}
+
+<!-- RESPONSIVE IMAGE -->
+{% set tabletImage = tablet or desktop %}
+{% set mobileImage = mobile or desktop %}
+<figure class="c-responsive-media">
+    <picture class="c-responsive-media__inner c-responsive-media__inner--{{ aspectRatio }}">
+        <source media="(min-width: 2000px)" {% if lazyLoad %}data-srcset="{{ desktop }} 1x, {{ desktop }} 2x" {% endif
+            %} srcset="{{ desktop }} 1x, {{ desktop }} 2x">
+        <source media="(min-width: 1141px)" {% if lazyLoad %}data-srcset="{{ desktop }} 1x, {{ desktop }} 2x" {% endif
+            %} srcset="{{ desktop }} 1x, {{ desktop }} 2x">
+        <source media="(min-width: 641px)" {% if lazyLoad %}data-srcset="{{ tabletImage }} 1x, {{ tabletImage }} 2x" {% endif %}
+            srcset="{{ tabletImage }} 1x, {{ tabletImage }} 2x">
+        <source media="(max-width: 640px)" {% if lazyLoad %}data-srcset="{{ mobileImage }} 1x, {{ mobileImage }} 2x" {% endif %}
+            srcset="{{ mobileImage }} 1x, {{ mobileImage }} 2x">
+        <img alt="{{ alt }}"
+            class="c-responsive-media__img c-responsive-media__img--{{ objectSize }} c-responsive-media__img--{{ objectCover }} js-responsive-image{% if lazyLoad %} js-lazy-load{% endif %}"
+            {% if lazyLoad %}data-src="{{ mobileImage }}" {% else %}src="{{ mobileImage }}" {% endif %}>
+
+        {%- if lazyLoad %}
+        <!--MEDIA LOADER-->
+        <span class="c-media-loader js-media-loader"></span>
+        <!--end MEDIA LOADER-->
+        {%- endif %}
+    </picture>
+</figure>
+<!--end RESPONSIVE IMAGE-->
+{% endmacro %}

@@ -1,0 +1,83 @@
+@use "../settings/settings.index" as settings;
+
+/**
+ * Hover support mixin
+ * Detect if device supports hover interaction
+ * usage:
+ * @include hover{}
+ */
+@mixin hover() {
+    @media (hover: hover) {
+        &:hover {
+            @content;
+        }
+    }
+}
+
+/**
+ * Focus accessibility support mixin
+ * Enable box shadow for focusable (tabbable) elements
+ * 1. Target only elements that are not disabled and need a visible indicator to show focus
+ * usage:
+ * @include focus{}
+ */
+@mixin focus() {
+    &:active,
+    &:focus {
+        /* 1 */
+        &:not(:disabled):focus-visible {
+            outline: 0;
+            box-shadow:
+                0 0 0 2px settings.$focus-indicator-divider-color,
+                0 0 0 4px settings.$focus-indicator-color;
+            @content;
+        }
+    }
+}
+
+/**
+ * Button reset
+ * Make button to look like text
+ * Useful for any kind of UI based on <button> element
+ * usage:
+ * @include button-reset;
+ */
+@mixin button-reset() {
+    border: none;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    outline: 0;
+    border-radius: 0;
+    box-shadow: none;
+    text-decoration: none;
+    text-transform: none;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    vertical-align: top;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    width: auto;
+    height: auto;
+    background: transparent;
+    line-height: normal;
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover,
+    &:focus,
+    &:active {
+        outline: none;
+    }
+}

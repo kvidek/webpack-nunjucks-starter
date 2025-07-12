@@ -1,0 +1,125 @@
+@use "../tools/tools.typography" as typography;
+@use "settings.breakpoint" as breakpoint;
+
+/**
+ * Roboto
+ */
+@include typography.font-face("Roboto", "Roboto-Regular");
+@include typography.font-face("Roboto", "Roboto-Bold", $font-weight: 700);
+
+/**
+ * Font variables
+ */
+$roboto: "Roboto", sans-serif;
+$font-primary: $roboto;
+$font-secondary: $roboto;
+
+/**
+ * Font size map
+ */
+$settings-typography: (
+    "a5": (
+        breakpoint.$breakpoint-sm: 55px,
+        breakpoint.$breakpoint-xl: 85px,
+    ),
+    "a4": (
+        breakpoint.$breakpoint-sm: 38px,
+        breakpoint.$breakpoint-xl: 64px,
+    ),
+    "a3": (
+        breakpoint.$breakpoint-sm: 28px,
+        breakpoint.$breakpoint-xl: 48px,
+    ),
+    "a2": (
+        breakpoint.$breakpoint-sm: 25px,
+        breakpoint.$breakpoint-xl: 41px,
+    ),
+    "a1": (
+        breakpoint.$breakpoint-sm: 18px,
+        breakpoint.$breakpoint-xl: 25px,
+    ),
+    "b0": (
+        breakpoint.$breakpoint-sm: 16px,
+        breakpoint.$breakpoint-xl: 18px,
+    ),
+    "b1": (
+        breakpoint.$breakpoint-sm: 14px,
+        breakpoint.$breakpoint-xl: 16px,
+    ),
+    "b2": (
+        breakpoint.$breakpoint-sm: 13px,
+        breakpoint.$breakpoint-xl: 15px,
+    ),
+    "b3": (
+        breakpoint.$breakpoint-sm: 12px,
+        breakpoint.$breakpoint-xl: 14px,
+    ),
+);
+
+/**
+ * Typography mixins
+ * usage:
+ * @include a5;
+ */
+@mixin a5 {
+    font-size: var(--a5);
+    font-family: $font-primary;
+    line-height: 100%;
+    letter-spacing: normal;
+}
+
+@mixin a4 {
+    font-size: var(--a4);
+    font-family: $font-secondary;
+    line-height: 107%;
+    letter-spacing: typography.em(-1.33px, 64px);
+}
+
+@mixin a3 {
+    font-size: var(--a3);
+    font-family: $font-primary;
+    line-height: 116%;
+    letter-spacing: typography.em(-1px, 48px);
+}
+
+@mixin a2 {
+    font-size: var(--a2);
+    font-family: $font-secondary;
+    line-height: 112%;
+    letter-spacing: typography.em(-0.8px, 41px);
+}
+
+@mixin a1 {
+    font-size: var(--a1);
+    font-family: $font-primary;
+    line-height: 130%;
+    letter-spacing: normal;
+}
+
+@mixin b0 {
+    font-size: var(--b0);
+    font-family: $font-secondary;
+    line-height: 144%;
+    letter-spacing: normal;
+}
+
+@mixin b1 {
+    font-size: var(--b1);
+    font-family: $font-primary;
+    line-height: 110%;
+    letter-spacing: normal;
+}
+
+@mixin b2 {
+    font-size: var(--b2);
+    font-family: $font-secondary;
+    line-height: 133%;
+    letter-spacing: typography.em(-0.1px, 15px);
+}
+
+@mixin b3 {
+    font-size: var(--b3);
+    font-family: $font-secondary;
+    line-height: 133%;
+    letter-spacing: typography.em(-0.1px, 15px);
+}

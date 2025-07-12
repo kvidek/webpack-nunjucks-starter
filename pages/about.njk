@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    {% include "head.njk" %}
+</head>
+<body>
+    {% include "loader.njk" %}
+    {% include "navigation.njk" %}
+    {% include "mobile-navigation.njk" %}
+    
+    <!--PAGE WRAPPER-->
+    <div id="about" class="o-page o-page--about">
+        {% include "header.njk" %}
+        
+        <!--PAGE CONTENT-->
+        <main class="o-page__inner o-page__inner--about">
+            <!-- Team section -->
+            {% set team_title = "Meet Our Amazing Team" %}
+            {% set team_members = [
+                {name: "John Doe", role: "CEO", bio: "Leading the company with vision and passion"},
+                {name: "Jane Smith", role: "CTO", bio: "Technical genius behind our innovations"},
+                {name: "Mike Johnson", role: "Designer", bio: "Creating beautiful user experiences"}
+            ] %}
+            {% include "team.njk" %}
+            
+            <!--SECTION-->
+            <section class="o-section">
+                <div class="o-container">
+                    <div class="c-section-name">
+                        about section
+                    </div>
+                </div>
+            </section>
+            <!--end SECTION-->
+        </main>
+        <!--end PAGE CONTENT-->
+        
+        {% include "footer.njk" %}
+    </div>
+    <!--end PAGE WRAPPER-->
+    
+    {% include "cookie-message.njk" %}
+    {% include "scripts.njk" %}
+</body>
+</html> 

@@ -1,0 +1,78 @@
+{# 
+  BUTTON COMPONENT
+  
+  A flexible button component that supports multiple button types including links, submit buttons, and regular buttons.
+  Provides consistent styling and behavior across different button types with optional modifier classes.
+  
+  USAGE:
+  {% from "partials/components/button.njk" import button %}
+  {{ button(button_url, button_title, button_type, button_modifier) }}
+  
+  PARAMETERS:
+  - button_url (string, required for 'link' type): URL for link buttons
+  - button_title (string, required): Text content displayed on the button
+  - button_type (string, optional): Type of button to render (default: 'button')
+    Options: 'link', 'submit', 'button'
+  - button_modifier (string, optional): Additional CSS modifier classes
+    Examples: 'c-button--primary', 'c-button--large', 'c-button--outline'
+  
+  BUTTON TYPES:
+  - 'link': Renders as an <a> tag with href attribute
+  - 'submit': Renders as a <button> tag with type="submit"
+  - 'button': Renders as a <button> tag with type="button" (default)
+  
+  FEATURES:
+  - Multiple button types (link, submit, button)
+  - Optional modifier classes for styling variants
+  - Consistent HTML structure across all types
+  - Accessible button labels
+  - Flexible styling through modifier classes
+  
+  EXAMPLE USAGE:
+  
+  Link button:
+  {{ button('/contact', 'Contact Us', 'link', 'c-button--primary') }}
+  
+  Submit button:
+  {{ button('', 'Submit Form', 'submit', 'c-button--large') }}
+  
+  Regular button:
+  {{ button('', 'Click Me', 'button', 'c-button--outline') }}
+  
+  Simple button (defaults):
+  {{ button('', 'Default Button') }}
+  
+  CSS CLASSES:
+  - Base class: 'c-button'
+  - Label class: 'c-button__label'
+  - Modifier classes: Applied via button_modifier parameter
+  
+  ACCESSIBILITY:
+  - Proper semantic HTML elements
+  - Descriptive button text
+  - Appropriate ARIA attributes (when needed)
+#}
+
+{# Button macro - expects button_url, button_title, button_type, and button_modifier #}
+{% macro button(button_url, button_title, button_type, button_modifier) %}
+<!-- BUTTON -->
+{% set button_url = button_url or '#' %}
+{% set button_title = button_title or 'CTA Button' %}
+{% set button_type = button_type or 'link' %}
+{% set button_modifier = button_modifier or '' %}
+
+{% if button_type == 'link' %}
+    <a href="{{ button_url }}" class="c-button{% if button_modifier %} {{ button_modifier }}{% endif %}">
+        <span class="c-button__label">{{ button_title }}</span>
+    </a>
+{% elif button_type == 'submit' %}
+    <button type="submit" class="c-button{% if button_modifier %} {{ button_modifier }}{% endif %}">
+        <span class="c-button__label">{{ button_title }}</span>
+    </button>
+{% else %}
+    <button type="button" class="c-button{% if button_modifier %} {{ button_modifier }}{% endif %}">
+        <span class="c-button__label">{{ button_title }}</span>
+    </button>
+{% endif %}
+<!--end BUTTON-->
+{% endmacro %} 

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    {% include "head.njk" %}
+</head>
+<body>
+    {% include "loader.njk" %}
+    {% include "navigation.njk" %}
+    {% include "mobile-navigation.njk" %}
+    
+    <!--PAGE WRAPPER-->
+    <div id="contact" class="o-page o-page--contact">
+        {% include "header.njk" %}
+        
+        <!--PAGE CONTENT-->
+        <main class="o-page__inner o-page__inner--contact">
+            <!-- Contact info section -->
+            {% set contact_title = "Get In Touch" %}
+            {% set contact_email = "hello@example.com" %}
+            {% set contact_phone = "+1 234 567 8900" %}
+            {% set contact_address = "123 Innovation Street, Tech City, TC 12345" %}
+            {% set contact_hours = "Monday - Friday: 9AM - 6PM" %}
+            {% include "contact-info.njk" %}
+            
+            <!--SECTION-->
+            <section class="o-section">
+                <div class="o-container">
+                    <div class="c-section-name">
+                        Contact Page Content
+                    </div>
+                </div>
+            </section>
+            <!--end SECTION-->
+        </main>
+        <!--end PAGE CONTENT-->
+        
+        {% include "footer.njk" %}
+    </div>
+    <!--end PAGE WRAPPER-->
+    
+    {% include "cookie-message.njk" %}
+    {% include "scripts.njk" %}
+</body>
+</html> 

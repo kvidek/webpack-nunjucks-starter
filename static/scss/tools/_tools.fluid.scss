@@ -1,0 +1,152 @@
+@use "sass:map";
+@use "sass:math";
+@use "../settings/settings.index" as settings;
+@use "tools.breakpoint" as tools-breakpoint;
+@use "tools.typography" as tools-typography;
+
+/**
+ * Fluid font sizes
+ * @param {String} $size - Size
+ * usage:
+ * @include font-size("a5");
+ */
+@mixin font-size($size: null) {
+    @if $size != null {
+        font-size: fluid-sizing(
+            map-deep-get(settings.$settings-typography, $size, settings.$breakpoint-sm),
+            map-deep-get(settings.$settings-typography, $size, settings.$breakpoint-xl)
+        );
+
+        @if settings.$use-container == false {
+            @include tools-breakpoint.mq(null, xxl) {
+                font-size: fluid-sizing-xxl(
+                    map-deep-get(settings.$settings-typography, $size, settings.$breakpoint-xl),
+                    math.div(map-deep-get(settings.$settings-typography, $size, settings.$breakpoint-xl), settings.$breakpoint-xxl) *
+                        settings.$breakpoint-xxxl * settings.$big-viewport-coefficient
+                );
+            }
+        }
+    }
+}
+
+/**
+ * Fluid property values
+ * @param {String} $property - Property
+ * @param {String} $spacing - Spacing
+ * @param {String} $value - Value
+ * usage:
+ * @include fluid-value("margin-top", "s-56");
+ * @include fluid-value("max-width", null, 600px);
+ * used In fluid-value mixin and font-size mixin
+ * use mixin instead
+ */
+@mixin fluid-value($property: null, $spacing: null, $value: null) {
+    @if $spacing != null {
+        @if (get-spacing-values($spacing) != null) {
+            #{$property}: fluid-sizing(
+                map-deep-get(settings.$settings-spacings, $spacing, settings.$breakpoint-sm),
+                map-deep-get(settings.$settings-spacings, $spacing, settings.$breakpoint-xl)
+            );
+
+            @if settings.$use-container == false {
+                @include tools-breakpoint.mq(null, xxl) {
+                    #{$property}: fluid-sizing-xxl(
+                        map-deep-get(settings.$settings-spacings, $spacing, settings.$breakpoint-xl),
+                        math.div(map-deep-get(settings.$settings-spacings, $spacing, settings.$breakpoint-xl), settings.$breakpoint-xxl) *
+                            settings.$breakpoint-xxxl * settings.$big-viewport-coefficient
+                    );
+                }
+            }
+        } @else {
+            @error "Spacing #{$spacing} not found in settings";
+        }
+    } @else if $value != null {
+        #{$property}: $value;
+
+        @if settings.$use-container == false {
+            @include tools-breakpoint.mq(null, xxl) {
+                #{$property}: fluid-sizing-xxl(
+                    $value,
+                    math.div($value, settings.$breakpoint-xxl) * settings.$breakpoint-xxxl * settings.$big-viewport-coefficient
+                );
+            }
+        }
+    }
+}
+
+/**
+ * Fluid font sizes
+ * @param {Number} $min-size - Min font size
+ * @param {Number} $max-size - Max font size
+ * @param {Number} $min-breakpoint - Min breakpoint
+ * @param {Number} $max-breakpoint - Max breakpoint
+ * @param {String} $unit - Return unit
+ * @return {String}
+ * used In fluid-value mixin and font-size mixin
+ * use mixin instead
+ */
+@function fluid-sizing($min-size, $max-size, $min-breakpoint: settings.$breakpoint-sm, $max-breakpoint: settings.$breakpoint-xl, $unit: vw) {
+    $slope: math.div($max-size - $min-size, $max-breakpoint - $min-breakpoint);
+    $slope-to-unit: round($slope * 100, 2);
+    $intercept-rem: round(tools-typography.rem($min-size - $slope * $min-breakpoint), 2);
+    $min-size-rem: round(tools-typography.rem($min-size), 2);
+    $max-size-rem: round(tools-typography.rem($max-size), 2);
+    @if $min-size == $max-size {
+        @return $min-size-rem;
+    }
+    @return clamp(#{$min-size-rem}, #{$slope-to-unit}#{$unit} + #{$intercept-rem}, #{$max-size-rem});
+}
+
+/**
+ * Fluid font sizes
+ * Used For Sizes > $breakpoint-xxl
+ * @param {Number} $min-size - Min font size
+ * @param {Number} $max-size - Max font size
+ * @param {Number} $min-breakpoint - Min breakpoint
+ * @param {Number} $max-breakpoint - Max breakpoint
+ * @param {String} $unit - Return unit
+ * @return {String}
+ */
+@function fluid-sizing-xxl($min-size, $max-size, $min-breakpoint: settings.$breakpoint-xxl, $max-breakpoint: settings.$breakpoint-xxxl, $unit: vw) {
+    $slope: math.div($max-size - $min-size, $max-breakpoint - $min-breakpoint);
+    $slope-to-unit: round($slope * 100, 2);
+    $intercept-rem: round(tools-typography.rem($min-size - $slope * $min-breakpoint), 2);
+    $min-size-rem: round(tools-typography.rem($min-size), 2);
+    $max-size-rem: round(tools-typography.rem($max-size), 2);
+    @return max(#{$min-size-rem}, #{$slope-to-unit}#{$unit} + #{$intercept-rem});
+}
+
+/**
+ * Round number to decimals
+ * @param {Number} $number - Number to round
+ * @param {Number} $decimals - Number of decimals
+ */
+@function round($number, $decimals: 0) {
+    $n: 1;
+    @if $decimals > 0 {
+        @for $i from 1 through $decimals {
+            $n: $n * 10;
+        }
+    }
+    @return math.div(math.round($number * $n), $n);
+}
+
+/**
+ * Get spacing values from settings
+ */
+@function get-spacing-values($spacing) {
+    @return map.get(settings.$settings-spacings, $spacing);
+}
+
+/**
+ * Fetch nested keys
+ * @param {Map} $map - Map
+ * @param {Arglist} $keys - Keys to fetch
+ * @return {*}
+ */
+@function map-deep-get($map, $keys...) {
+    @each $key in $keys {
+        $map: map.get($map, $key);
+    }
+    @return $map;
+}

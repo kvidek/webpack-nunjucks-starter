@@ -1,0 +1,20 @@
+<!--TEAM SECTION-->
+<section class="o-section">
+    <div class="o-container">
+        <div class="c-team">
+            <h2 class="c-team__title">{{ team_title or 'Our Team' }}</h2>
+            <div class="c-team__grid">
+                {% for member in team_members %}
+                <div class="c-team__member">
+                    <h3 class="c-team__name">{{ member.name }}</h3>
+                    <p class="c-team__role">{{ member.role }}</p>
+                    {% if member.bio %}
+                    <p class="c-team__bio">{{ member.bio }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+<!--end TEAM SECTION--> 

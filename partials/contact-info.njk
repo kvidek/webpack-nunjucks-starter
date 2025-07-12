@@ -1,0 +1,31 @@
+<!--CONTACT INFO SECTION-->
+<section class="o-section">
+    <div class="o-container">
+        <div class="c-contact-info">
+            <h2 class="c-contact-info__title">{{ contact_title or 'Contact Information' }}</h2>
+            <div class="c-contact-info__details">
+                {% if contact_email %}
+                <div class="c-contact-info__item">
+                    <strong>Email:</strong> <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+                </div>
+                {% endif %}
+                {% if contact_phone %}
+                <div class="c-contact-info__item">
+                    <strong>Phone:</strong> <a href="tel:{{ contact_phone }}">{{ contact_phone }}</a>
+                </div>
+                {% endif %}
+                {% if contact_address %}
+                <div class="c-contact-info__item">
+                    <strong>Address:</strong> {{ contact_address }}
+                </div>
+                {% endif %}
+                {% if contact_hours %}
+                <div class="c-contact-info__item">
+                    <strong>Hours:</strong> {{ contact_hours }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<!--end CONTACT INFO SECTION--> 

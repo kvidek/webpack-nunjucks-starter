@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    {% include "head.njk" %}
+</head>
+<body>
+    {% include "loader.njk" %}
+    {% include "navigation.njk" %}
+    {% include "mobile-navigation.njk" %}
+    
+    <!--PAGE WRAPPER-->
+    <div id="home" class="o-page o-page--home">
+        {% include "header.njk" %}
+        
+        <!--PAGE CONTENT-->
+        <main class="o-page__inner o-page__inner--home">
+            <!-- Link button with modifier -->
+            {% from "components/button.njk" import button %}
+            {{ button("/about", "About Us", "link") }}
+            
+            <!-- Regular button without modifier -->
+            {{ button(null, 'Click Me', "link") }}
+            
+            <!-- Submit button -->
+            {{ button(null, "Submit Form", "submit", "c-button--primary") }}
+            
+            <!-- Link button without modifier -->
+            {{ button("/contact", "Contact us", "link") }}
+            
+            <!-- Hero section -->
+            {% set hero_title = "Welcome to Our Amazing Site" %}
+            {% set hero_subtitle = "The best place to be" %}
+            {% set hero_button_text = "Learn More" %}
+            {% set hero_button_url = "/about" %}
+            {% include "hero.njk" %}
+            
+            <!--SECTION-->
+            <section class="o-section">
+                <div class="o-container">
+                    <div class="c-section-name">
+                        <h2>Featured Images</h2>
+                        <div class="c-section-name__grid">
+                            {% from "components/responsive-image.njk" import responsiveImage %}
+                            
+                            <!-- First responsive image -->
+                            <div class="c-section-name__item">
+                                {{ responsiveImage(
+                                    "https://picsum.photos/1200/800?random=1",
+                                    "Beautiful landscape view",
+                                    null,
+                                    null,
+                                    "16-9",
+                                    true
+                                ) }}
+                            </div>
+                            
+                            <!-- Second responsive image -->
+                            <div class="c-section-name__item">
+                                {{ responsiveImage(
+                                    "https://picsum.photos/1200/800?random=2",
+                                    "Modern architecture",
+                                    "https://picsum.photos/800/600?random=2",
+                                    "https://picsum.photos/400/300?random=2",
+                                    "4-3",
+                                    true
+                                ) }}
+                            </div>
+                            
+                            <!-- Third responsive image -->
+                            <div class="c-section-name__item">
+                                {{ responsiveImage(
+                                    "https://picsum.photos/1200/800?random=3",
+                                    "Nature photography",
+                                    "https://picsum.photos/800/600?random=3",
+                                    "https://picsum.photos/400/300?random=3",
+                                    "1-1",
+                                    true
+                                ) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--end SECTION-->
+        </main>
+        <!--end PAGE CONTENT-->
+        
+        {% include "footer.njk" %}
+    </div>
+    <!--end PAGE WRAPPER-->
+    
+    {% include "cookie-message.njk" %}
+    {% include "scripts.njk" %}
+</body>
+</html> 
