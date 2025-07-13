@@ -78,6 +78,24 @@ function discoverPages() {
     return pages;
 }
 
+// Function to create HTML plugins dynamically
+function createHtmlPlugins() {
+    const pages = discoverPages();
+    return pages.map((page) => {
+        return new HtmlWebpackPlugin({
+            template: page.template,
+            filename: page.filename,
+            title: page.title,
+            inject: false,
+            minify: false,
+            templateParameters: page.templateParameters,
+            templateContent: (templateParams) => {
+                return processNunjucksTemplate(page.template, templateParams);
+            },
+        });
+    });
+}
+
 // Custom template function to process Nunjucks includes
 function processNunjucksTemplate(templatePath, options) {
     const env = nunjucks.configure(
@@ -98,7 +116,7 @@ export default (env, argv) => {
     console.log(env);
 
     // Define the proxy URL for BrowserSync
-    const proxy = "http://www.private.loc/webpack-nunjucks-starter/";
+    const proxy = "http://www.private.loc/html-partials-test";
 
     // Define the entry points for the webpack build
     const entry = {
@@ -114,9 +132,15 @@ export default (env, argv) => {
         new BrowserSyncPlugin(
             {
                 proxy: proxy,
-                files: ["static/dist/*.js", "static/dist/*.css", "**/*.php", "**/*.html"],
+                files: ["static/dist/*.js", "static/dist/*.css", "static/dist/HTML/*.html", "**/*.php", "**/*.html"],
                 injectCss: true,
                 open: false,
+                // Add watch for pages directory to detect new files
+                watch: true,
+                watchOptions: {
+                    ignored: /node_modules/,
+                    poll: 1000, // Check for changes every second
+                },
             },
             {
                 reload: false,
@@ -130,25 +154,9 @@ export default (env, argv) => {
         }),
     ];
 
-    // Add HTML pages
-    const pages = discoverPages();
-
-    // Add HtmlWebpackPlugin for each page
-    pages.forEach((page) => {
-        plugins.push(
-            new HtmlWebpackPlugin({
-                template: page.template,
-                filename: page.filename,
-                title: page.title,
-                inject: false,
-                minify: false,
-                templateParameters: page.templateParameters,
-                templateContent: (templateParams) => {
-                    return processNunjucksTemplate(page.template, templateParams);
-                },
-            }),
-        );
-    });
+    // Add HTML plugins dynamically
+    const htmlPlugins = createHtmlPlugins();
+    plugins.push(...htmlPlugins);
 
     // Add a source map for easier debugging in development mode
     if (mode === "development") {
@@ -175,6 +183,13 @@ export default (env, argv) => {
         resolve: { extensions: [".js"] },
         // Define the plugins to be used from `plugins` variable
         plugins: plugins,
+        // Enhanced watch options for development
+        watch: mode === "development",
+        watchOptions: {
+            ignored: /node_modules/,
+            poll: 1000, // Check for changes every second
+            aggregateTimeout: 300, // Delay rebuild by 300ms
+        },
         module: {
             rules: [
                 {
